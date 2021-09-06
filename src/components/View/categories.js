@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import EditPopUp from "../PopUps/editPopup";
-import AddPopUp from "../PopUps/addPopup";
+import EditPopUp from "../PopUps/CategoryPopups/editCategoryPopup";
+import AddPopUp from "../PopUps/CategoryPopups/addCategoryPopup";
 import Category from "./category";
-import RemovePopUp from "../PopUps/removePopup";
+import RemovePopUp from "../PopUps/CategoryPopups/removeCategoryPopup";
 import "./../../css/category.css";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -37,7 +37,7 @@ function Categories() {
           {categories.map((item) => {
             return (
               <Category
-                key={item.Id}
+                key={item.id}
                 category={item}
                 categories={categories}
                 setCurrentCaregory={setCurrentCaregory}

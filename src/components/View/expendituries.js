@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import EditPopUp from "../PopUps/editPopup";
-import AddPopUp from "../PopUps/addPopup";
+import EditPopUp from "../PopUps/ExpenditurePopups/editExpenditurePopup";
+import AddPopUp from "../PopUps/ExpenditurePopups/addExpenditurePopup";
 import Expenditure from "./expenditure";
-import RemovePopUp from "../PopUps/removePopup";
+import RemovePopUp from "../PopUps/ExpenditurePopups/removeExpenditurePopup";
 import "./../../css/expenditure.css";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -15,7 +15,7 @@ function Expendituries() {
   const [addPopupShow, setAddPopupShow] = useState(false);
 
   useEffect(() => {
-    fetch(`http://expenditure.uteam-dev.com/api/expenditure`)
+    fetch(`https://localhost:44352/api/Expenditure`)
       .then((response) => response.json())
       .then((json) => setExpendituries(json.data));
   }, []);
@@ -37,7 +37,7 @@ function Expendituries() {
           {expendituries.map((item) => {
             return (
               <Expenditure
-                key={item.Id}
+                key={item.id}
                 expenditure={item}
                 expendituries={expendituries}
                 setCurrentExpenditure={setCurrentExpenditure}

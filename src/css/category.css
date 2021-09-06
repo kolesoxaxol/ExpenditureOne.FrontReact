@@ -1,7 +1,7 @@
 .category{
     display: inline-block;
     width: 300px;
-    height: 150px;
+    min-height: 150px;
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
     transition: 0.3s;
     margin: 15px;

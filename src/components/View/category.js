@@ -16,7 +16,7 @@ function Category(props) {
   }
 
   return (
-    <div className="category" key={props.category.id}>
+    <div className="category">
       <div>Category: {props.category?.categoryName}</div>
       <div>Id: {props.category.id}</div>
       <div>
