@@ -3,6 +3,7 @@ import "./../../css/expenditure.css";
 import { Button } from "react-bootstrap";
 
 function Expenditure(props) {
+  
   function editExpenditureHandler(id, editPopupShow) {
     var currentExpenditure = props.expendituries.find((x) => x.id === id);
     props.setCurrentExpenditure(currentExpenditure);

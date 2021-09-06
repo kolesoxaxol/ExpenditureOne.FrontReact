@@ -16,7 +16,7 @@ function AddPopUp(props) {
         body: JSON.stringify({ categoryName: categoryName, color: color }),
       };
 
-      fetch(`http://expenditure.uteam-dev.com/api/Category`, requestOptions)
+      fetch(`https://localhost:44352/api/Category`, requestOptions)
         .then((response) => response.json())
         .then(function (data) {
           console.log(data);
@@ -29,10 +29,7 @@ function AddPopUp(props) {
             },
           ]);
         })
-        .then(props.setAddPopupShow(false))
-        .then(() =>
-          props.setCategories([...props.categories, { categoryName, color }])
-        );
+        .then(props.setAddPopupShow(false));
     }
   };
 
@@ -56,7 +53,7 @@ function AddPopUp(props) {
         <Modal.Body>
           <form onSubmit={handleSubmit}>
             <label>
-              Category Name:
+              Category:
               <input
                 type="text"
                 value={categoryName}

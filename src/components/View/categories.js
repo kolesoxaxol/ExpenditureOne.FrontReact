@@ -15,7 +15,7 @@ function Categories() {
   const [addPopupShow, setAddPopupShow] = useState(false);
 
   useEffect(() => {
-    fetch(`http://expenditure.uteam-dev.com/api/Category`)
+    fetch(`https://localhost:44352/api/Category`)
       .then((response) => response.json())
       .then((json) => setCategories(json.data));
   }, []);

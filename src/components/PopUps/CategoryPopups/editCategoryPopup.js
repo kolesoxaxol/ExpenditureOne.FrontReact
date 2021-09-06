@@ -34,19 +34,21 @@ function EditPopUp(props) {
       };
 
       fetch(
-        `http://expenditure.uteam-dev.com/api/Category/${category.id}`,
+        `https://localhost:44352/api/Category/${category.id}`,
         requestOptions
       )
         .then((response) => response.json())
         .then((data) => props.setCurrentCaregory(data))
         .then(props.setEditPopupShow(false))
         .then(() => {
-          const atIndex = props.categories.findIndex(cat => cat.id === category.id);
- 
+          const atIndex = props.categories.findIndex(
+            (cat) => cat.id === category.id
+          );
+
           props.setCategories([
             ...props.categories.slice(0, atIndex),
             { ...category },
-            ...props.categories.slice(atIndex + 1)
+            ...props.categories.slice(atIndex + 1),
           ]);
         });
     }
@@ -66,16 +68,24 @@ function EditPopUp(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <input
-            type="text"
-            onChange={updateCategoryName}
-            value={props.category?.categoryName}
-          />
-          <input
-            type="text"
-            onChange={updateColor}
-            value={props.category?.color}
-          />
+          <label>
+            Category:
+            <input
+              type="text"
+              onChange={updateCategoryName}
+              value={props.category?.categoryName}
+            />
+          </label>
+
+          <label>
+            Color:
+            <input
+              type="text"
+              onChange={updateColor}
+              value={props.category?.color}
+            />
+          </label>
+
           <Button onClick={ChangeCategory}>Apply</Button>
           {/* <input type="text" value={category.data.color} /> */}
         </Modal.Body>

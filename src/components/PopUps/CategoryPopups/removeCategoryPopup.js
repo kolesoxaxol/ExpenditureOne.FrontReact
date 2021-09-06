@@ -6,7 +6,7 @@ function RemovePopUp(props) {
     const category = props.category;
     
     if (category.id) {
-      fetch(`http://expenditure.uteam-dev.com/api/Category/${category.id}`, {
+      fetch(`https://localhost:44352/api/Category/${category.id}`, {
         method: "DELETE",
       })
         .then((response) => response.json())

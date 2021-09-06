@@ -1,20 +1,31 @@
 import { Modal, Button } from "react-bootstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function EditPopUp(props) {
-  function updateExpenditureName(e) {
+  function updateTitle(e) {
     props.setCurrentExpenditure((prev) => {
       return {
         ...prev,
-        expenditureName: e.target.value,
+        title: e.target.value,
       };
     });
   }
 
-  function updateColor(e) {
+  function updateDescription(e) {
     props.setCurrentExpenditure((prev) => {
       return {
         ...prev,
-        color: e.target.value,
+        description: e.target.value,
+      };
+    });
+  }
+
+  function updateDate(date) {
+    props.setCurrentExpenditure((prev) => {
+      return {
+        ...prev,
+        dateOfExpenditure: date,
       };
     });
   }
@@ -23,9 +34,14 @@ function EditPopUp(props) {
     props.setEditPopupShow(false);
   }
 
+  function checkDate(date) {
+    if (!date) return "";
+    return new Date(date);
+  }
+
   function ChangeExpenditure() {
     const expenditure = props.expenditure;
-debugger;
+
     if (expenditure.id) {
       const requestOptions = {
         method: "PUT",
@@ -34,19 +50,21 @@ debugger;
       };
 
       fetch(
-        `https://localhost:44352/api/expendure/${expenditure.id}`,
+        `https://localhost:44352/api/Expenditure/${expenditure.id}`,
         requestOptions
       )
         .then((response) => response.json())
         .then((data) => props.setCurrentExpenditure(data))
-        .then(props.setEditPopupShow(false))
         .then(() => {
-          const atIndex = props.expendituries.findIndex(cat => cat.id === expenditure.id);
- 
+          props.setEditPopupShow(false);
+          const atIndex = props.expendituries.findIndex(
+            (cat) => cat.id === expenditure.id
+          );
+
           props.setExpendituries([
             ...props.expendituries.slice(0, atIndex),
             { ...expenditure },
-            ...props.expendituries.slice(atIndex + 1)
+            ...props.expendituries.slice(atIndex + 1),
           ]);
         });
     }
@@ -66,16 +84,29 @@ debugger;
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <input
-            type="text"
-            onChange={updateExpenditureName}
-            value={props.expenditure?.expenditureName}
-          />
-          <input
-            type="text"
-            onChange={updateColor}
-            value={props.expenditure?.color}
-          />
+          <label>
+            Title:
+            <input
+              type="text"
+              onChange={updateTitle}
+              value={props.expenditure?.title}
+            />
+          </label>
+          <label>
+            Description: 
+            <input
+              type="text"
+              onChange={updateDescription}
+              value={props.expenditure?.description}
+            />
+          </label>
+          <label>
+            Date: 
+            <DatePicker
+              selected={checkDate(props.expenditure?.dateOfExpenditure)}
+              onChange={(date) => updateDate(date)}
+            />
+          </label>
           <Button onClick={ChangeExpenditure}>Apply</Button>
           {/* <input type="text" value={expenditure.data.color} /> */}
         </Modal.Body>
