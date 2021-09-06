@@ -9,6 +9,12 @@ function AddPopUp(props) {
   const [expenditureDescription, setExpenditureDescription] = useState("");
   const [date, setDate] = useState(new Date());
 
+  const clearState = () => {
+    setExpenditureTitle("");
+    setExpenditureDescription("");
+    setDate(new Date());
+  };
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
@@ -36,6 +42,7 @@ function AddPopUp(props) {
               id: data.data.id,
             },
           ]);
+          clearState();
         })
         .then(props.setAddPopupShow(false));
     }
