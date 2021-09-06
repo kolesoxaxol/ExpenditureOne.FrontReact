@@ -18,8 +18,8 @@ function AddPopUp(props) {
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify({
           title: expenditureTitle,
-          description: "description",
-          dateOfExpenditure: "2021-09-03T10:46:52.351Z",
+          description: expenditureDescription,
+          dateOfExpenditure: date,
         }),
       };
 
@@ -37,10 +37,7 @@ function AddPopUp(props) {
             },
           ]);
         })
-        .then(props.setAddPopupShow(false))
-        // .then((data) => props.setExpendituries([...props.expendituries,
-        //   {title: expenditureTitle, description: expenditureDescription, dateOfExpenditure: date, id: data.id}]));
-        ;
+        .then(props.setAddPopupShow(false));
     }
   };
 
