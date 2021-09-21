@@ -35,6 +35,7 @@ function Expenditure(props) {
       <div>Description: {description}</div>
       <div>Date: {dateFormat(props.expenditure?.dateOfExpenditure)}</div>
       <div>Id: {props.expenditure.id}</div>
+      <div>Categories: {props.expenditure.categories.map(x => x.categoryName).join(",")}</div>
       {/* <div>
         <span>Color:</span> <span>{props.expenditure.color} </span>
         <span className="color" style={{ backgroundColor: props.expenditure.color }}></span>

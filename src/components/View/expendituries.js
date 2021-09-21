@@ -6,22 +6,63 @@ import RemovePopUp from "../PopUps/ExpenditurePopups/removeExpenditurePopup";
 import "./../../css/expenditure.css";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
+import Input from "../ui/Input/Input";
 
 function Expendituries() {
   const [expendituries, setExpendituries] = useState([]);
+  const [filteredExpendituries, setFilteredExpendituries] = useState([]);
   const [currentExpenditure, setCurrentExpenditure] = useState();
   const [editPopupShow, setEditPopupShow] = useState(false);
   const [removePopupShow, setRemovePopupShow] = useState(false);
   const [addPopupShow, setAddPopupShow] = useState(false);
+  const [filterCategories, setFilterCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     fetch(`https://localhost:44352/api/Expenditure`)
       .then((response) => response.json())
-      .then((json) => setExpendituries(json.data));
+      .then((json) => {
+        setExpendituries(json.data);
+        setFilteredExpendituries(json.data);
+        getCategories(json.data);
+      });
   }, []);
+
+  function onHandleSelectedCategory(event) {
+    var currentValue = event.currentTarget.value;
+    setSelectedCategory(currentValue);
+
+    if (!currentValue) {
+      setFilteredExpendituries(expendituries);
+    } else {
+      let filteredExpendituries = expendituries.filter((x) =>
+        x.categories.some((z) => z.id.toString() === event.currentTarget.value)
+      );
+      setFilteredExpendituries(filteredExpendituries);
+    }
+  }
 
   function addExpenditureHandler(addPopupShow) {
     setAddPopupShow(addPopupShow);
+  }
+
+  function getCategories(data) {
+    const categories = [];
+    data.forEach(function (expenditure) {
+      expenditure.categories.forEach(function (category) {
+        let isExist = categories.find(
+          (x) => x.categoryName === category.categoryName
+        );
+        if (!isExist) {
+          categories.push(category);
+        }
+      });
+    });
+
+    let options = [];
+    categories.map((item, key) => (options.push({ value: item.id, displayValue: item.categoryName, key: key })));
+
+    setFilterCategories(options);
   }
 
   return (
@@ -29,12 +70,22 @@ function Expendituries() {
       <Container>
         <h1>Expendituries</h1>
         <div>
+          <Input
+            type="select"
+            value={selectedCategory}
+            onChange={onHandleSelectedCategory}
+            label="Filter"
+            customPlaceHolder="Select Category"
+            optionsList={filterCategories}
+          />
+        </div>
+        <div>
           <Button variant="success" onClick={() => addExpenditureHandler(true)}>
             Add
           </Button>
         </div>
         <div className="Expendituries">
-          {expendituries.map((item) => {
+          {filteredExpendituries.map((item) => {
             return (
               <Expenditure
                 key={item.id}
