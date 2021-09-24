@@ -7,6 +7,9 @@ import "./../../css/expenditure.css";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Input from "../ui/Input/Input";
+import * as categoryActions from "./../../store/actions/categoryActions";
+import * as expenditureActions from "./../../store/actions/expenditureActions";
+import { useDispatch, useSelector } from "react-redux";
 
 function Expendituries() {
   const [expendituries, setExpendituries] = useState([]);
@@ -15,18 +18,26 @@ function Expendituries() {
   const [editPopupShow, setEditPopupShow] = useState(false);
   const [removePopupShow, setRemovePopupShow] = useState(false);
   const [addPopupShow, setAddPopupShow] = useState(false);
-  const [filterCategories, setFilterCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    dispatch(categoryActions.getCategoriesOptions());
+    //  dispatch(expenditureActions.getExpenditures());
+
     fetch(`https://localhost:44352/api/Expenditure`)
       .then((response) => response.json())
       .then((json) => {
         setExpendituries(json.data);
         setFilteredExpendituries(json.data);
-        getCategories(json.data);
       });
   }, []);
+
+  const categoriesOptions = useSelector((state) => state.categories.options);
+  // const expenditures = useSelector((state) => state.expenditures.items);
+  // setExpendituries(expenditures);
+  // setFilteredExpendituries(expenditures);
 
   function onHandleSelectedCategory(event) {
     var currentValue = event.currentTarget.value;
@@ -46,29 +57,10 @@ function Expendituries() {
     setAddPopupShow(addPopupShow);
   }
 
-  function getCategories(data) {
-    const categories = [];
-    data.forEach(function (expenditure) {
-      expenditure.categories.forEach(function (category) {
-        let isExist = categories.find(
-          (x) => x.categoryName === category.categoryName
-        );
-        if (!isExist) {
-          categories.push(category);
-        }
-      });
-    });
-
-    let options = [];
-    categories.map((item, key) => (options.push({ value: item.id, displayValue: item.categoryName, key: key })));
-
-    setFilterCategories(options);
-  }
-
   return (
     <>
       <Container>
-        <h1>Expendituries</h1>
+        <h1>Expenditures</h1>
         <div>
           <Input
             type="select"
@@ -76,7 +68,7 @@ function Expendituries() {
             onChange={onHandleSelectedCategory}
             label="Filter"
             customPlaceHolder="Select Category"
-            optionsList={filterCategories}
+            optionsList={categoriesOptions}
           />
         </div>
         <div>
@@ -84,7 +76,7 @@ function Expendituries() {
             Add
           </Button>
         </div>
-        <div className="Expendituries">
+        <div className="Expenditures">
           {filteredExpendituries.map((item) => {
             return (
               <Expenditure

@@ -1,8 +1,16 @@
 import { Modal, Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import FormControl from "react-bootstrap/FormControl";
+import FormGroup from "react-bootstrap/FormGroup";
+import Form from "react-bootstrap/Form";
+import FormLabel from "react-bootstrap/FormLabel";
+import { useSelector } from "react-redux";
 
 function EditPopUp(props) {
+  const categories = useSelector((state) => state.categories.options);
+
+  //TODO:
   function updateTitle(e) {
     props.setCurrentExpenditure((prev) => {
       return {
@@ -70,6 +78,17 @@ function EditPopUp(props) {
     }
   }
 
+  function isChecked(category) {
+    let isExist = props.expenditure?.categories?.some(
+      (cat) => cat.id === category.value
+    );
+    return isExist ? "checked" : "";
+  }
+
+  function ToggleCategory(e) {
+    debugger;
+  }
+
   return (
     <>
       <Modal
@@ -93,7 +112,7 @@ function EditPopUp(props) {
             />
           </label>
           <label>
-            Description: 
+            Description:
             <input
               type="text"
               onChange={updateDescription}
@@ -101,14 +120,30 @@ function EditPopUp(props) {
             />
           </label>
           <label>
-            Date: 
+            Date:
             <DatePicker
               selected={checkDate(props.expenditure?.dateOfExpenditure)}
               onChange={(date) => updateDate(date)}
             />
           </label>
+          <FormGroup>
+            <FormLabel>Categories</FormLabel>
+            {categories.map((item) => {
+              return (
+                <Form.Check
+                  inline
+                  defaultChecked={isChecked(item)}
+                  label={item.displayValue}
+                  name={`group-${item.value}`}
+                  type="checkbox"
+                  id={item.value}
+                  onClick={(e) => ToggleCategory(item)}
+                />
+              );
+            })}
+          </FormGroup>
+
           <Button onClick={ChangeExpenditure}>Apply</Button>
-          {/* <input type="text" value={expenditure.data.color} /> */}
         </Modal.Body>
       </Modal>
     </>
