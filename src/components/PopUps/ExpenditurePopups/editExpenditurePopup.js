@@ -1,45 +1,45 @@
-import { Modal, Button } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import FormControl from "react-bootstrap/FormControl";
 import FormGroup from "react-bootstrap/FormGroup";
 import Form from "react-bootstrap/Form";
 import FormLabel from "react-bootstrap/FormLabel";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import * as expenditureActions from "../../../store/actions/expenditureActions";
 
 function EditPopUp(props) {
   const categories = useSelector((state) => state.categories.options);
+  const dispatch = useDispatch();
 
-  //TODO:
   function updateTitle(e) {
-    props.setCurrentExpenditure((prev) => {
-      return {
-        ...prev,
+    dispatch(
+      expenditureActions.setCurrentExpenditure({
         title: e.target.value,
-      };
-    });
+      })
+    );
   }
 
   function updateDescription(e) {
-    props.setCurrentExpenditure((prev) => {
-      return {
-        ...prev,
+    dispatch(
+      expenditureActions.setCurrentExpenditure({
         description: e.target.value,
-      };
-    });
+      })
+    );
   }
 
   function updateDate(date) {
-    props.setCurrentExpenditure((prev) => {
-      return {
-        ...prev,
+    dispatch(
+      expenditureActions.setCurrentExpenditure({
         dateOfExpenditure: date,
-      };
-    });
+      })
+    );
   }
 
+  function updateCategory(e) {}
+
   function onHide() {
-    props.setEditPopupShow(false);
+    dispatch(expenditureActions.toggleEditPopup());
   }
 
   function checkDate(date) {
@@ -57,24 +57,9 @@ function EditPopUp(props) {
         body: JSON.stringify(expenditure),
       };
 
-      fetch(
-        `https://localhost:44352/api/Expenditure/${expenditure.id}`,
-        requestOptions
-      )
-        .then((response) => response.json())
-        .then((data) => props.setCurrentExpenditure(data))
-        .then(() => {
-          props.setEditPopupShow(false);
-          const atIndex = props.expendituries.findIndex(
-            (cat) => cat.id === expenditure.id
-          );
-
-          props.setExpendituries([
-            ...props.expendituries.slice(0, atIndex),
-            { ...expenditure },
-            ...props.expendituries.slice(atIndex + 1),
-          ]);
-        });
+      dispatch(
+        expenditureActions.updateExpenditures(expenditure, requestOptions)
+      );
     }
   }
 
@@ -83,10 +68,6 @@ function EditPopUp(props) {
       (cat) => cat.id === category.value
     );
     return isExist ? "checked" : "";
-  }
-
-  function ToggleCategory(e) {
-    debugger;
   }
 
   return (
@@ -131,13 +112,14 @@ function EditPopUp(props) {
             {categories.map((item) => {
               return (
                 <Form.Check
+                  key={item.id}
                   inline
                   defaultChecked={isChecked(item)}
                   label={item.displayValue}
                   name={`group-${item.value}`}
                   type="checkbox"
                   id={item.value}
-                  onClick={(e) => ToggleCategory(item)}
+                  onClick={(e) => updateCategory(item)}
                 />
               );
             })}

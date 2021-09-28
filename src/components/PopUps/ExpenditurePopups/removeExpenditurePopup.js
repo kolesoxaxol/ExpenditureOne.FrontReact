@@ -1,30 +1,24 @@
 import { Modal, Button } from "react-bootstrap";
 import React from "react";
+import { useDispatch } from "react-redux";
+import * as expenditureActions from "../../../store/actions/expenditureActions";
 
 function RemovePopUp(props) {
+  const dispatch = useDispatch();
+
   function RemoveExpenditure() {
     const expenditure = props.expenditure;
-    
+
     if (expenditure.id) {
-      fetch(`https://localhost:44352/api/Expenditure/${expenditure.id}`, {
-        method: "DELETE",
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .then(props.setRemovePopupShow(false))
-        .then(() => {
-          const atIndex = props.expendituries.findIndex(cat => cat.id === expenditure.id);
-    
-          props.setExpendituries([
-            ...props.expendituries.slice(0, atIndex),
-            ...props.expendituries.slice(atIndex + 1)
-          ]);
-        });
+      const requestOptions = { method: "DELETE" };
+      dispatch(
+        expenditureActions.removeExpenditure(expenditure.id, requestOptions)
+      );
     }
   }
 
   function onHide() {
-    props.setRemovePopupShow(false);
+    dispatch(expenditureActions.toggleRemovePopup());
   }
 
   return (

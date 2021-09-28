@@ -13,6 +13,7 @@ export const getCategories = () => {
   };
 };
 
+//TODO: think about it
 export const getCategoriesOptions = () => {
   return async (dispatch, getState) => {
     fetch(`https://localhost:44352/api/Category`)

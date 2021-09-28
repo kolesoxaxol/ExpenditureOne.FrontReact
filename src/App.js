@@ -1,30 +1,32 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Categories from "./components/View/categories.js";
-import Expendituries from "./components/View/expendituries.js";
+import Expenditures from "./components/View/expenditures.js";
 import Home from "./components/View/home.js";
 import Navbar from "react-bootstrap/Navbar";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink,
+} from "react-router-dom";
 
 function App() {
   return (
     <Router>
       <div>
         <Navbar>
-          <Navbar.Brand href="./">Home</Navbar.Brand>
-          <Navbar.Brand href="/categories">Categories</Navbar.Brand>
-          <Navbar.Brand href="/expendituries">Expendituries</Navbar.Brand>
+        <Navbar.Brand as={NavLink} to="/">Home</Navbar.Brand>
+        <Navbar.Brand as={NavLink} to="/categories">Categories</Navbar.Brand>
+        <Navbar.Brand as={NavLink} to="/expenditures">Expenditures</Navbar.Brand>
+          {/* <NavLink to="./">Home</NavLink>
+          <NavLink to="/categories">Categories</NavLink>
+          <NavLink to="/expenditures">Expenditures</NavLink> */}
         </Navbar>
-      
+
         <Switch>
-          <Route path="/categories">
-            <Categories />
-          </Route>
-          <Route path="/expendituries">
-            <Expendituries />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
+          <Route path="/categories" component={Categories} />
+          <Route path="/expenditures" component={Expenditures} />
+          <Route path="/" component={Home} />
         </Switch>
       </div>
     </Router>

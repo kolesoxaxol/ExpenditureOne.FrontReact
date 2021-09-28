@@ -3,11 +3,15 @@ import Modal from "react-bootstrap/Modal";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useDispatch } from "react-redux";
+import * as expenditureActions from "../../../store/actions/expenditureActions";
 
 function AddPopUp(props) {
   const [expenditureTitle, setExpenditureTitle] = useState("");
   const [expenditureDescription, setExpenditureDescription] = useState("");
   const [date, setDate] = useState(new Date());
+
+  const dispatch = useDispatch();
 
   const clearState = () => {
     setExpenditureTitle("");
@@ -29,27 +33,21 @@ function AddPopUp(props) {
         }),
       };
 
-      fetch(`https://localhost:44352/api/Expenditure`, requestOptions)
-        .then((response) => response.json())
-        .then(function (data) {
-          console.log(data);
-          props.setExpendituries([
-            ...props.expendituries,
-            {
-              title: expenditureTitle,
-              description: expenditureDescription,
-              dateOfExpenditure: date,
-              id: data.data.id,
-            },
-          ]);
-          clearState();
-        })
-        .then(props.setAddPopupShow(false));
+      const newExpenditure = {
+        title: expenditureTitle,
+        description: expenditureDescription,
+        date: date,
+      };
+
+      dispatch(
+        expenditureActions.addExpenditure(newExpenditure, requestOptions)
+      );
+      clearState();
     }
   };
 
   function onHide() {
-    props.setAddPopupShow(false);
+    dispatch(expenditureActions.toggleAddPopup());
   }
 
   return (

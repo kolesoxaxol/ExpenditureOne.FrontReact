@@ -1,19 +1,22 @@
 import React from "react";
 import "./../../css/expenditure.css";
 import { Button } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import * as expenditureActions from "../../store/actions/expenditureActions";
 
 function Expenditure(props) {
-  
-  function editExpenditureHandler(id, editPopupShow) {
-    var currentExpenditure = props.expendituries.find((x) => x.id === id);
-    props.setCurrentExpenditure(currentExpenditure);
-    props.setEditPopupShow(editPopupShow);
+  const dispatch = useDispatch();
+
+  function editExpenditureHandler(id) {
+    var currentExpenditure = props.expenditures.find((x) => x.id === id);
+    dispatch(expenditureActions.setCurrentExpenditure(currentExpenditure));
+    dispatch(expenditureActions.toggleEditPopup());
   }
 
-  function removeExpenditureHandler(id, removePopupShow) {
-    var currentExpenditure = props.expendituries.find((x) => x.id === id);
-    props.setCurrentExpenditure(currentExpenditure);
-    props.setRemovePopupShow(removePopupShow);
+  function removeExpenditureHandler(id) {
+    var currentExpenditure = props.expenditures.find((x) => x.id === id);
+    dispatch(expenditureActions.setCurrentExpenditure(currentExpenditure));
+    dispatch(expenditureActions.toggleRemovePopup());
   }
 
   function dateFormat(dateString) {
@@ -35,20 +38,16 @@ function Expenditure(props) {
       <div>Description: {description}</div>
       <div>Date: {dateFormat(props.expenditure?.dateOfExpenditure)}</div>
       <div>Id: {props.expenditure.id}</div>
-      <div>Categories: {props.expenditure.categories.map(x => x.categoryName).join(",")}</div>
-      {/* <div>
-        <span>Color:</span> <span>{props.expenditure.color} </span>
-        <span className="color" style={{ backgroundColor: props.expenditure.color }}></span>
-      </div> */}
+      <div>Categories: {props.expenditure.categories?.map(x => x.categoryName).join(",")}</div>
       <Button
         variant="warning"
-        onClick={() => editExpenditureHandler(props.expenditure.id, true)}
+        onClick={() => editExpenditureHandler(props.expenditure.id)}
       >
         Edit
       </Button>
       <Button
         variant="danger"
-        onClick={() => removeExpenditureHandler(props.expenditure.id, true)}
+        onClick={() => removeExpenditureHandler(props.expenditure.id)}
       >
         Remove
       </Button>
